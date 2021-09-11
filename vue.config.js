@@ -1,6 +1,7 @@
 module.exports = {
   productionSourceMap: false,
   lintOnSave: false,
+	publicPath: "/generate-resume/",
   configureWebpack: (config) => {
     if (process.env.NODE_ENV === "production") {
       Object.assign(config, {

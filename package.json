@@ -1,6 +1,6 @@
 {
   "name": "generate-resume",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -9,9 +9,8 @@
   "dependencies": {
     "dayjs": "^1.10.6",
     "download.js": "^1.0.0",
-    "element-china-area-data": "^5.0.2",
     "element-ui": "^2.15.5",
-    "element-ui-saas-extend": "^1.0.0",
+    "element-ui-saas-extend": "^1.0.9",
     "stylus-shortcut": "^1.0.0",
     "vue": "^2.6.11",
     "vue-property-decorator": "^9.1.2",

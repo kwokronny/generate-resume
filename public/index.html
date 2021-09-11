@@ -1,18 +1,34 @@
 <!DOCTYPE html>
 <html lang="">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui@2.15.5/lib/theme-chalk/index.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui-saas-extend@1.0.9/lib/theme-chalk/index.css" />
     <title>简历生成</title>
   </head>
   <body>
     <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong>很抱歉！本项目无法在禁用 JavaScript 的环境使用，请允许使用 JavaScript。</strong>
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <% if(process.env.NODE_ENV === "production"){ %>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuedraggable@2.24.3/dist/vuedraggable.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/element-ui@2.15.5/lib/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/element-ui-saas-extend@1.0.9/lib/element-ui-saas-extend.min.js"></script>
+    <% } %>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.7/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.7/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.7/locale/zh-cn.js"></script>
+    <script>
+      dayjs.extend(window.dayjs_plugin_relativeTime);
+      dayjs.locale("zh-cn");
+    </script>
   </body>
 </html>

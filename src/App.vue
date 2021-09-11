@@ -12,11 +12,28 @@
 			</el-menu>
 		</el-header>
 		<div class="container">
-			<person-info v-model="personInfo"></person-info>
-			<open-source v-model="openSource"></open-source>
-			<project-experience v-model="projectExperience" :company="company"></project-experience>
-			<work-experience v-model="workExperience"></work-experience>
-			<education-experience v-model="educationExperience"></education-experience>
+			<draggable v-model="resume" handle=".drag-handle">
+				<div v-for="(item,index) in resume" :key="`panel_${index}`" :class="{'no-print':item.hide}">
+					<div class="no-print">
+						<el-checkbox v-model="item.hide">打印隐藏</el-checkbox>
+						<el-link class="spac-mh_10 drag-handle" type="primary">
+							<i class="el-icon-d-caret"></i>调序
+						</el-link>
+						<!-- <el-popconfirm title="确定删除吗？" @confirm="delect(index)">
+							<el-link type="danger" slot="reference">删除</el-link>
+						</el-popconfirm>-->
+					</div>
+					<person-info v-if="item.type=='PersonInfo'" v-model="item.data"></person-info>
+					<open-source v-else-if="item.type=='OpenSource'" v-model="item.data"></open-source>
+					<project-experience
+						v-else-if="item.type=='ProjectExperience'"
+						v-model="item.data"
+						:company="company"
+					></project-experience>
+					<work-experience v-else-if="item.type=='WorkExperience'" v-model="item.data"></work-experience>
+					<education-experience v-else-if="item.type=='EducationExperience'" v-model="item.data"></education-experience>
+				</div>
+			</draggable>
 		</div>
 	</el-container>
 </template>
@@ -28,6 +45,12 @@ import ProjectExperience from "./components/ProjectExperience.vue"
 import EducationExperience from "./components/EducationExperience.vue"
 import OpenSource from "./components/OpenSource.vue"
 import { downloadText } from "download.js"
+
+interface PanelStruc {
+	type: "PersonInfo" | "WorkExperience" | "ProjectExperience" | "EducationExperience" | "OpenSource";
+	data: any
+	hide?: boolean;
+}
 
 @Component({
 	components: {
@@ -42,32 +65,42 @@ export default class App extends Vue {
 	@Ref("Import") ImportInput!: HTMLInputElement;
 	private localStorageName = "simple_resume"
 
-	private personInfo: Record<string, any> | null = null
-	private workExperience: Record<string, any>[] = []
-	private projectExperience: Record<string, any>[] = []
-	private educationExperience: Record<string, any>[] = []
-	private openSource: Record<string, any>[] = []
-
-	@Watch("personInfo", { deep: true })
-	@Watch("workExperience")
-	@Watch("projectExperience")
-	@Watch("educationExperience")
-	@Watch("openSource")
+	@Watch("resume", { deep: true })
 	private saveLocalStorage() {
-		let { personInfo, workExperience, projectExperience, educationExperience, openSource } = this;
-		let resumeContent = JSON.stringify({ personInfo, workExperience, projectExperience, educationExperience, openSource });
+		let resumeContent = JSON.stringify(this.resume);
 		window.localStorage.setItem(this.localStorageName, resumeContent)
 		return resumeContent
 	}
 
+	private resume: PanelStruc[] = [{
+		type: "PersonInfo",
+		data: null
+	}, {
+		type: "OpenSource",
+		data: []
+	}, {
+		type: "ProjectExperience",
+		data: []
+	}, {
+		type: "WorkExperience",
+		data: []
+	}, {
+		type: "EducationExperience",
+		data: []
+	}]
+
 	get company() {
-		return this.workExperience.map((item: any) => item.company)
+		return this.resume.filter((item: any) => item.type == "WorkExperience").map((item: any) => item.data.map((item: any) => item.company)).flat(1);
+	}
+
+	private delect(index: number) {
+		this.resume.splice(index, 1)
 	}
 
 	private mounted() {
 		let config = JSON.parse(window.localStorage.getItem(this.localStorageName) || "null");
 		if (config) {
-			Object.assign(this, config)
+			this.resume = config;
 		}
 	}
 
@@ -81,14 +114,13 @@ export default class App extends Vue {
 		let fReader = new FileReader();
 		let self = this;
 		fReader.addEventListener("load", function () {
-			// convert image file to base64 string
-			// console.log(fReader.result);
 			let config = JSON.parse(fReader.result as string);
-			Object.assign(self, config)
+			self.resume = config;
 		}, false);
 		if (files)
 			fReader.readAsText(files[0])
 	}
+
 
 }
 </script>

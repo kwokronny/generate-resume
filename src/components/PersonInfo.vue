@@ -46,8 +46,8 @@
 			</el-empty>
 		</el-card>
 		<el-card v-if="personInfo" shadow="never">
-			<h3>个人简述</h3>
-			<div v-html="personInfo.resume"></div>
+			<h3>自我简述</h3>
+			<div class="spac-mh_10" v-html="personInfo.resume"></div>
 		</el-card>
 	</div>
 </template>

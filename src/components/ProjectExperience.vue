@@ -85,7 +85,7 @@ export default class ProjectExperience extends Vue {
 		return this.experience.map((item: any) => {
 			item = Object.assign({}, item)
 			if (item.time) {
-				let timeLen = dayjs(item.time[0]).from(item.time[1], true)
+				let timeLen = window.dayjs(item.time[0]).from(item.time[1], true)
 				item.time = `${item.time.join(" 至 ")} [ ${timeLen} ]`;
 			} else {
 				item.time = ""
@@ -162,7 +162,7 @@ export default class ProjectExperience extends Vue {
 		this.model.appendInfo.splice(index, 1)
 	}
 
-	private getCompany() {
+	private async getCompany() {
 		return this.company
 	}
 
@@ -189,6 +189,7 @@ export default class ProjectExperience extends Vue {
 		},
 		appendInfo: {
 			label: "追加信息",
+			type: "plain",
 			slot: true,
 			value: []
 		}

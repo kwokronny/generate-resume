@@ -89,8 +89,11 @@ export default class WorkExperience extends Vue {
 	get experienceList() {
 		return this.experience.map((item: any) => {
 			item = Object.assign({}, item)
-			if (item.time) {
-				let timeLen = dayjs(item.time[0]).from(item.time[1], true)
+			if (item.timeEnd) {
+				let timeLen = window.dayjs(item.startTime).fromNow(true)
+				item.time = `${item.startTime} 至今 [ ${timeLen} ]`;
+			} else if (item.time) {
+				let timeLen = window.dayjs(item.time[0]).from(item.time[1], true)
 				item.time = `${item.time.join(" 至 ")} [ ${timeLen} ]`;
 			} else {
 				item.time = ""
@@ -170,19 +173,29 @@ export default class WorkExperience extends Vue {
 			label: "公司名称",
 			type: "text",
 			required: true,
+			col: 24
+		},
+		startTime: {
+			bindShow: (model: Record<string, any>) => model.timeEnd,
+			label: "时间",
+			type: "month",
+			valueFormat: "yyyy/MM",
+			style: "width: 100%",
+			required: true,
 			col: 12
 		},
-		timeEnd: {
-			label: "此公司在职",
-			type: "switch",
-			col: 6
-		},
 		time: {
+			bindShow: (model: Record<string, any>) => !model.timeEnd,
 			label: "时间",
 			type: "monthrange",
 			valueFormat: "yyyy/MM",
 			style: "width: 100%",
 			required: true,
+			col: 12
+		},
+		timeEnd: {
+			label: "此公司在职",
+			type: "switch",
 			col: 12
 		},
 		jobs: {
@@ -205,6 +218,7 @@ export default class WorkExperience extends Vue {
 		},
 		appendInfo: {
 			label: "追加信息",
+			type: "plain",
 			slot: true,
 			value: []
 		}
